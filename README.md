@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+SWAPI-SPANISH, this is an API to serve data in spanish from [SWAPI-API](https://swapi.dev/api). It also has a connection to a MYSQL database on Amazon RDS, to create a new custom characters.
 
 ## Project setup
 
@@ -43,6 +43,9 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# serverless offline
+$ npm run start:offline
 ```
 
 ## Run tests
@@ -51,25 +54,21 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
 ```
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+The project is currently deployed at this link. This project is configured to perform deployments using the serverless framework. The `$ serverless deploy` command deploys the code to AWS Lambda, but the node modules are placed in a `Lambda layer` which has another deployment.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+It is possible to run the application locally using
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+$ npm run start:offline
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+But is necessary environment variables of the database to run correctly.
 
 ## Resources
 
@@ -90,9 +89,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Widmar Raul Quispe Leon](https://www.linkedin.com/in/widmar-raul-quispe-le%C3%B3n-aa556324b/)
 
 ## License
 
