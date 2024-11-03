@@ -1,0 +1,52 @@
+# TODO: This file is to deploy the layer to AWS Lambda Layers (incompleted)
+name: Deploy layer modules of API Taxi-Remisse to AWS Lambda Layers
+
+on:
+  push:
+    branches:
+      - layer
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Read .nvmrc
+        id: nvmrc
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.nvmrc.outputs.NODE_VERSION }}
+
+      - name: Install prod dependencies
+        run: npm install --omit=dev
+
+      - name: Zip node_modules
+        run: zip -r taxi-remisse-modules.zip node_modules
+
+      - name: Upload layer to AWS Lambda
+        id: upload-layer
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws lambda publish-layer-version --layer-name taxi-remisse-modules --zip-file fileb://taxi-remisse-modules.zip
+
+      - name: Get ARN of layer
+        id: get-arn
+        run: '::set-output name=ARN::$(echo ${{ steps.upload-layer.outputs.LayerArn }} | cut -d: -f7)'
+
+      - name: Build application
+        run: npm run build
+
+      - name: Deploy to AWS Lambda
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: npx serverless deploy --config serverless.stg.yml --stage stg

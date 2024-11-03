@@ -1,0 +1,60 @@
+org: widmarito99
+service: swapi-spanish-api
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  region: sa-east-1
+  runtime: nodejs20.x
+  apiGateway:
+    binaryMediaTypes:
+      - "multipart/form-data"
+      - "*/*"
+
+functions:
+  main:
+    name: swapi-spanish-api
+    handler: dist/main-serverless.handler
+    events:
+      - http:
+          method: any
+          path: /{any+}
+          cors: 
+            origin: "*"
+            methods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+    port: 3000
+
+package:
+  individually: true
+  include:
+    - dist/**
+  exclude:
+    - node_modules/**
+    - nodejs/**
+    - .env
+    - .env.dev
+    - ".eslintrc.js"
+    - ".gitignore"
+    - ".nvmrc"
+    - ".prettierrc"
+    - "nest-cli.json"
+    - "package-lock.json"
+    - "package.json"
+    - "README.md"
+    - "serverless.yml"
+    - "tsconfig.build.json"
+    - "tsconfig.json"
+    - "peru-bus-modules.zip"
+    - "deploy.sh"
+    - "layer_version.txt"
